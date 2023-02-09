@@ -13,20 +13,26 @@ router.use((req, res, next) => {
 router.get('/create', (req, res) => {
   db.query(`CREATE DATABASE ${process.env.DB_NAME}`, (err) => {
     if (err) {
-      res.json({ msg: err })
+      res.send({ ...err})
       throw err
     }
+    
     console.log(`Database ${process.env.DB_NAME} created successfully`);
-    db.query(`USE ${process.env.DB_NAME}`, (err) => {
+
+    db.query(`
+        USE ${process.env.DB_NAME};
+        ${createTablesQuery} 
+        ${getQuery()}
+      `,
+
+      (err, results) => {
+      
       if (err) {
-        res.json({ msg: err })
+        res.send({ ...err })
         throw err
       }
-      db.query(`${createTablesQuery} ${getQuery()}`);
-
-      console.log(`Using database: ${process.env.DB_NAME}`);
-      
-      return res.sendStatus(200)
+        
+        return res.status(201).send({ ...results });
     })
   })
 });
@@ -42,7 +48,7 @@ router.post('/account/update', (req, res) => {
       if (err) {
         throw err
       }
-      res.send({ results });
+      res.status(201).send({ results });
     })
   }
 
@@ -62,7 +68,7 @@ router.post('/account/update', (req, res) => {
       if (err) {
         throw err
       }
-      res.send({ results });
+      res.status(201).send({ results });
     })
   }
 })
