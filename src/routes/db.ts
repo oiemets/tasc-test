@@ -1,38 +1,47 @@
 import { Router } from 'express';
 import db from '../database';
 import { createTablesQuery } from '../queries/createTables.query';
-import { getQuery } from '../utils/getQuery';
+import { query } from '../utils/query';
+import { DB_NAME } from '../constants/dbName';
 
 const router = Router();
 
 router.use((req, res, next) => {
   console.log('Req made to /db route')
   next();
-} )
+})
 
-router.get('/create', (req, res) => {
-  db.query(`CREATE DATABASE ${process.env.DB_NAME}`, (err) => {
+router.post('/create', (req, res) => {
+
+  db.connect((err) => {
     if (err) {
-      res.send({ ...err})
       throw err
     }
-    
-    console.log(`Database ${process.env.DB_NAME} created successfully`);
+    console.log('Connected to the database!')
 
-    db.query(`
-        USE ${process.env.DB_NAME};
-        ${createTablesQuery} 
-        ${getQuery()}
-      `,
-
-      (err, results) => {
-      
+    db.query(`CREATE DATABASE ${DB_NAME}`, (err) => {
       if (err) {
-        res.send({ ...err })
+        res.send({ ...err})
         throw err
       }
+      
+      console.log(`Database ${DB_NAME} created successfully`);
+  
+      db.query(`
+          USE ${DB_NAME};
+          ${createTablesQuery} 
+          ${query}
+        `,
+  
+        (err, results) => {
         
-        return res.status(201).send({ ...results });
+        if (err) {
+          res.send({ ...err })
+          throw err
+        }
+          
+          return res.status(201).send({ ...results });
+      })
     })
   })
 });
@@ -42,7 +51,7 @@ router.post('/account/update', (req, res) => {
 
   if (clientTypeName) {
     db.query(`
-      USE ${process.env.DB_NAME};
+      USE ${DB_NAME};
       UPDATE Account
       SET clientTypeName = '${clientTypeName}'`, (err, results) => {
       if (err) {
@@ -54,7 +63,7 @@ router.post('/account/update', (req, res) => {
 
   if (individualName) {
     db.query(`
-      USE ${process.env.DB_NAME};
+      USE ${DB_NAME};
       UPDATE Account
       SET individualName = '${individualName}'
       WHERE individualId IN
