@@ -16,16 +16,17 @@ import {
   mapIndividualValuesQuery,
   mapAccountValuesQuery
 } from "./mappers";
+import { ACCOUNT, CLIENT, CLIENT_TYPE, INDIVIDUAL } from "../constants/tables";
 
 const clientTypes: ClientTypes = getArrayOfNumbers(3).map(mapClientTypeValues);
 const clients: Clients = clientTypes.map(mapClients);
 const individuals: Individuals = clients.flatMap(mapClientIds).map(mapIndividuals);
 const accounts: Accounts = individuals.flatMap(mapindividualIds).map(mapAccounts);
 
-const clientTypeQuery = joinValues<ClientType>('clientType(id, name)', clientTypes, mapClientTypeValuesQuery);
-const clientQuery = joinValues<Client>('client(id, name, clientTypeId)', clients, mapClientValuesQuery);
-const individualQuery = joinValues<Individual>('individual(id, clientId, name)', individuals, mapIndividualValuesQuery);
-const accountQuery = joinValues<Account>('account(individualId, name)', accounts, mapAccountValuesQuery)
+const clientTypeQuery = joinValues<ClientType>(`${CLIENT_TYPE}(id, name)`, clientTypes, mapClientTypeValuesQuery);
+const clientQuery = joinValues<Client>(`${CLIENT}(id, name, clientTypeId)`, clients, mapClientValuesQuery);
+const individualQuery = joinValues<Individual>(`${INDIVIDUAL}`, individuals, mapIndividualValuesQuery);
+const accountQuery = joinValues<Account>(`${ACCOUNT}(individualId, name)`, accounts, mapAccountValuesQuery)
 
 export const tablesValues = `
   ${clientTypeQuery}

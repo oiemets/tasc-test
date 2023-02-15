@@ -1,4 +1,4 @@
-import { Nullable } from "./generics";
+import type { Nullable } from "./generics";
 
 export type Account = {
   id: number;

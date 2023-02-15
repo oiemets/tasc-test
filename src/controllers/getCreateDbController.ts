@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import db from '../database';
 import { createAndFillOutTablesQuery } from "../queries/createAndFillOutTablesQuery";
 import { createDatabase } from "../queries/createDatabase";
@@ -6,21 +6,22 @@ import { createDatabase } from "../queries/createDatabase";
 export const getCreateDbController = (req: Request, res: Response) => {
   db.connect((err) => {
     if (err) {
-      throw err
-    }
-    db.query(createDatabase, (err) => {
-      if (err) {
-        res.send({ ...err})
-        throw err
-      }
-      db.query(createAndFillOutTablesQuery,
-        (err, results) => {
+      res.status(500).send({ ...err })
+    } else {
+      db.query(createDatabase, (err) => {
         if (err) {
-          res.send({ ...err })
-          throw err
+          res.status(500).send({ ...err })
+        } else {
+          db.query(createAndFillOutTablesQuery,
+            (err, results) => {
+            if (err) {
+              res.status(500).send({ ...err })
+            } else {
+              res.status(201).send({ results });
+            }
+          })
         }
-        return res.status(201).send({ results });
       })
-    })
+    }
   })
 }
