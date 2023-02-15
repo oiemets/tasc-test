@@ -1,7 +1,7 @@
-import { Account, Accounts } from "../types/account";
-import { Client, Clients } from "../types/client";
-import { ClientType, ClientTypes } from "../types/clientType";
-import { Individual, Individuals } from "../types/individual";
+import type { Account, Accounts } from "../types/account";
+import type { Client, Clients } from "../types/client";
+import type { ClientType, ClientTypes } from "../types/clientType";
+import type { Individual, Individuals } from "../types/individual";
 import { joinValues } from "./joinValues";
 import { getArrayOfNumbers } from "./getArrayOfNumbers";
 import {
