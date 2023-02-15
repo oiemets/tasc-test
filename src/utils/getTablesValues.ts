@@ -27,7 +27,7 @@ const clientQuery = joinValues<Client>('client(id, name, clientTypeId)', clients
 const individualQuery = joinValues<Individual>('individual(id, clientId, name)', individuals, mapIndividualValuesQuery);
 const accountQuery = joinValues<Account>('account(individualId, name)', accounts, mapAccountValuesQuery)
 
-export const query = `
+export const tablesValues = `
   ${clientTypeQuery}
   ${clientQuery}
   ${individualQuery}
