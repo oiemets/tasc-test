@@ -1,1 +1,0 @@
-export const getCreateDatabaseQuery = (name: string) => `CREATE DATABASE ${name}`;

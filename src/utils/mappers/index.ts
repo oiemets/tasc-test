@@ -3,7 +3,7 @@ import type { Client } from "../../types/client";
 import type { Individual, PartialIndividuals, PartialIndividual } from "../../types/individual";
 import type { Account, PartialAccount, PartialAccounts } from "../../types/account";
 import { getArrayOfNumbers } from "../getArrayOfNumbers";
-import { CLIENT_TYPE_NAME, CLIENT_NAME, INDIVIDUAL_NAME, ACCOUNT_NAME } from '../../constants/names';
+import { CLIENT_TYPE_NAME, CLIENT_NAME, INDIVIDUAL_NAME, ACCOUNT_NAME } from '../../constants';
 
 export const mapClientTypeValues = (id: number): ClientType => ({ id, name: `${CLIENT_TYPE_NAME}${id}` });
 

@@ -1,27 +1,14 @@
-import type { Request, Response } from "express";
-import db from '../database';
-import { createAndFillOutTablesQuery } from "../queries/createAndFillOutTablesQuery";
+import type { RequestHandler } from "express";
 import { createDatabase } from "../queries/createDatabase";
+import { query } from '../database';
+import { createTablesQuery } from "../queries/createTables";
 
-export const getCreateDbController = (req: Request, res: Response) => {
-  db.connect((err) => {
-    if (err) {
-      res.status(500).send({ ...err })
-    } else {
-      db.query(createDatabase, (err) => {
-        if (err) {
-          res.status(500).send({ ...err })
-        } else {
-          db.query(createAndFillOutTablesQuery,
-            (err, results) => {
-            if (err) {
-              res.status(500).send({ ...err })
-            } else {
-              res.status(201).send({ results });
-            }
-          })
-        }
-      })
-    }
-  })
+export const getCreateDbController: RequestHandler = async (req, res, next) => {
+  try {
+    await query(createDatabase);
+    const result = await query(createTablesQuery);
+    res.status(201).send({ result });
+  } catch (err) {
+    next(err)
+  }
 }

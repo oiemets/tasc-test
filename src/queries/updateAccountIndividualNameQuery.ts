@@ -1,15 +1,14 @@
-import { ACCOUNT, CLIENT, INDIVIDUAL } from "../constants/tables";
-import { useDatabase } from "./useDatabase";
+import { DB_NAME, TABLES } from "../constants";
 
 export const updateAccountIndividualNameQuery = (individualName: string) => `
-  ${useDatabase}
-  UPDATE ${ACCOUNT}
+  USE ${DB_NAME};
+  UPDATE ${TABLES.ACCOUNT}
   SET individualName = '${individualName}'
   WHERE individualId IN (
     SELECT individual.id
-    FROM ${INDIVIDUAL}
-    JOIN ${CLIENT}
-    ON ${INDIVIDUAL}.clientId = client.id
-    WHERE ${CLIENT}.name = 'ClientName1' OR ${CLIENT}.name = 'ClientName2'
+    FROM ${TABLES.INDIVIDUAL}
+    JOIN ${TABLES.CLIENT}
+    ON ${TABLES.INDIVIDUAL}.clientId = client.id
+    WHERE ${TABLES.CLIENT}.name = 'ClientName1' OR ${TABLES.CLIENT}.name = 'ClientName2'
   )
 `

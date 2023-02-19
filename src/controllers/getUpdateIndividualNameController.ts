@@ -1,19 +1,17 @@
-import type { Request, Response } from "express";
-import db from '../database';
+import type { RequestHandler } from "express";
 import { updateAccountIndividualNameQuery } from "../queries/updateAccountIndividualNameQuery";
+import { query } from '../database';
 
-export const getUpdateIndividualNameController = (req: Request, res: Response) => {
+export const getUpdateIndividualNameController: RequestHandler = async (req, res, next) => {
   const { individualName } = req.body;
-
   if (individualName) {
-    db.query(updateAccountIndividualNameQuery(individualName), (err, results) => {
-      if (err) {
-        res.status(500).send({...err})
-      } else {
-        res.status(201).send({ results });
-      }
-    })
+    try {
+      const result = await query(updateAccountIndividualNameQuery(individualName))
+      res.status(200).send({ result });
+    } catch(err) {
+      next(err)
+    }
   } else {
-    res.status(400).send({ msg: 'Error! Missing individualName field' })
+    res.status(400).send({ msg: 'Error! individualName is missing' })
   }
 }

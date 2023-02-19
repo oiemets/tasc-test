@@ -1,18 +1,17 @@
-import type { Request, Response } from "express";
-import db from '../database';
+import type { RequestHandler } from "express";
 import { updateAccountClientTypeNameQuery } from "../queries/updateAccountClientTypeNameQuery";
+import { query } from '../database';
 
-export const getUpdateClientTypeNameController = (req: Request, res: Response) => {
+export const getUpdateClientTypeNameController: RequestHandler = async (req, res, next) => {
   const { clientTypeName } = req.body;
   if (clientTypeName) {
-    db.query(updateAccountClientTypeNameQuery(clientTypeName), (err, results) => {
-      if (err) {
-        res.status(500).send({ ...err });
-      } else {
-        res.status(201).send({ results });
-      }
-    })
+    try {
+      const result = await query(updateAccountClientTypeNameQuery(clientTypeName));
+      res.status(200).send({ result });
+    } catch(err) {
+      next(err);
+    }
   } else {
-    res.status(400).send({ msg: 'Error! clientTypeName field missing' })
+    res.status(400).send({ msg: 'error! clientTypeName is missing!' })
   }
 }

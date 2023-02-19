@@ -3,6 +3,7 @@ config();
 
 import express from 'express';
 import dbRoutes from './routes/db';
+import { errorHandler } from './utils/errorHandler';
 
 async function bootstrap() {
   const app = express();
@@ -10,8 +11,9 @@ async function bootstrap() {
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-
-  app.use('/api/db', dbRoutes)
+  
+  app.use('/api/db', dbRoutes);
+  app.use(errorHandler);
 
   try {
     app.listen(PORT, () => console.log(`Running on port: ${PORT}`))

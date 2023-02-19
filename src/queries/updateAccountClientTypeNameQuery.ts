@@ -1,8 +1,7 @@
-import { ACCOUNT } from "../constants/tables";
-import { useDatabase } from "./useDatabase";
+import { DB_NAME, TABLES } from "../constants";
 
 export const updateAccountClientTypeNameQuery = (clientTypeName: string) => `
-  ${useDatabase}
-  UPDATE ${ACCOUNT}
+  USE ${DB_NAME};
+  UPDATE ${TABLES.ACCOUNT}
   SET clientTypeName = '${clientTypeName}'
 `

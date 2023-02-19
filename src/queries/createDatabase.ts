@@ -1,4 +1,3 @@
-import { DB_NAME } from "../constants/dbName";
-import { getCreateDatabaseQuery } from "../utils/getCreateDatabaseQuery";
+import { DB_NAME } from "../constants";
 
-export const createDatabase = getCreateDatabaseQuery(DB_NAME || '');
+export const createDatabase = `CREATE DATABASE ${DB_NAME}`;
