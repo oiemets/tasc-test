@@ -37,8 +37,3 @@ export const mapAccounts = ({ individualId }: PartialAccount, index: number): Ac
     clientTypeName: null
   }
 }
-
-export const mapClientTypeValuesQuery = ({ id, name }: ClientType) => `(${id}, '${name}')`;
-export const mapClientValuesQuery = ({ id, name, clientTypeId }: Client) => `(${id}, '${name}', ${clientTypeId})`;
-export const mapIndividualValuesQuery = ({ id, clientId, name }: Individual) => `(${id}, '${clientId}', '${name}')`;
-export const mapAccountValuesQuery = ({ individualId, name }: Account) => `(${individualId}, '${name}')`;
